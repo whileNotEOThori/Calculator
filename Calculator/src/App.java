@@ -3,11 +3,13 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;*/
-import java.awt.Color;
-import java.awt.GridLayout;
+// import java.awt.Color;
+// import java.awt.GridLayout;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class App {
+public class App implements ActionListener {
 
     JFrame window;
     JTextField textField;
@@ -49,13 +51,13 @@ public class App {
         operationButtons[7] = clrButton;
 
         for (int i = 0; i < 8; i++) {
-            // button.addActionListener(this);
+            operationButtons[i].addActionListener(this);
             operationButtons[i].setFocusable(false);
         }
 
         for (int i = 0; i < 10; i++) {
             numButtons[i] = new JButton(String.valueOf(i));
-            // numButtons[i].addActionListener(this);
+            numButtons[i].addActionListener(this);
             numButtons[i].setFocusable(false);
         }
 
@@ -96,6 +98,90 @@ public class App {
     public static void main(String[] args) throws Exception {
         // System.out.println("Hello, World!");
         App calculator = new App();
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        for (int i = 0; i < 10; i++) {
+            if (e.getSource() == numButtons[i]) {
+                textField.setText(textField.getText().concat(String.valueOf(i)));
+            }
+        }
+
+        if (e.getSource() == decButton) {
+            textField.setText(textField.getText().concat("."));
+            return;
+        }
+
+        if (e.getSource() == addButton) {
+            operand1 = Double.parseDouble(textField.getText());
+            operator = '+';
+            textField.setText("");
+            return;
+        }
+
+        if (e.getSource() == subButton) {
+            operand1 = Double.parseDouble(textField.getText());
+            operator = '-';
+            textField.setText("");
+            return;
+        }
+
+        if (e.getSource() == mulButton) {
+            operand1 = Double.parseDouble(textField.getText());
+            operator = '*';
+            textField.setText("");
+            return;
+        }
+
+        if (e.getSource() == divButton) {
+            operand1 = Double.parseDouble(textField.getText());
+            operator = '/';
+            textField.setText("");
+            return;
+        }
+
+        if (e.getSource() == equButton) {
+            operand2 = Double.parseDouble(textField.getText());
+
+            switch (operator) {
+                case '+':
+                    result = operand1 + operand2;
+                    break;
+                case '-':
+                    result = operand1 - operand2;
+                    break;
+                case '*':
+                    result = operand1 * operand2;
+                    break;
+                case '/':
+                    result = operand1 / operand2;
+                    break;
+                default:
+                // throw new AssertionError();
+            }
+            textField.setText(String.valueOf(result));
+            // operand1 = 0.00;
+            // operand2 = 0.00;
+            operand1 = result;
+            return;
+        }
+
+        if (e.getSource() == clrButton) {
+            textField.setText("");
+            return;
+        }
+
+        if (e.getSource() == delButton) {
+            String text = textField.getText();
+            textField.setText("");
+
+            for (int i = 0; i < text.length() - 1; i++) {
+                textField.setText(textField.getText() + text.charAt(i));
+            }
+            return;
+        }
 
     }
 }
